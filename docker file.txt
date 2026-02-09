@@ -1,0 +1,9 @@
+FROM nginx:latest
+
+# Remove default nginx html
+RUN rm -rf /usr/share/nginx/html/*
+
+# Copy our html file
+COPY index.html /usr/share/nginx/html/
+
+EXPOSE 80
