@@ -15,18 +15,19 @@ pipeline {
                     def PROD_REPO = "${env.DOCKER_USER}/prod"
 
                     def targetRepo = ""
+                    
+if (env.GIT_BRANCH == 'origin/dev') {
+    targetRepo = DEV_REPO
+    echo "Targeting DEV repository: ${targetRepo}"
 
-                    if (env.BRANCH_NAME == 'dev') {
-                        targetRepo = DEV_REPO
-                        echo "Targeting DEV repository: ${targetRepo}"
+} else if (env.GIT_BRANCH == 'origin/main' || env.GIT_BRANCH == 'origin/master') {
+    targetRepo = PROD_REPO
+    echo "Targeting PROD repository: ${targetRepo}"
 
-                    } else if (env.BRANCH_NAME == 'main' || env.BRANCH_NAME == 'master') {
-                        targetRepo = PROD_REPO
-                        echo "Targeting PROD repository: ${targetRepo}"
+} else {
+    error "Pushing images for branch ${env.GIT_BRANCH} is not allowed."
+}
 
-                    } else {
-                        error "Pushing images for branch ${env.BRANCH_NAME} is not allowed."
-                    }
 
                     def img = docker.build("${targetRepo}:${env.BUILD_NUMBER}")
 
