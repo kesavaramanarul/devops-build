@@ -9,3 +9,4 @@ docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .
 
 echo "✅ Build completed"
 docker images | grep ${IMAGE_NAME}
+# build script
